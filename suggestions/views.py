@@ -2,17 +2,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import PostForm, CommentForm
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView
 from .models import Post, Comment, BoardCategory
-from django.utils import timezone
-from django.contrib import messages
 from django.core.paginator import Paginator
-# Create your views here.
+
 
 
 class PostListView(LoginRequiredMixin, ListView):
