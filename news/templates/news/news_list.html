@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block extra_css %} .nav__link[name="Home"] {background-color: #1caf9a; color: white;} {% endblock %}
+{% block body_block %}
+{% load static %}
+{% load groupfilter %}
+
+
+<div class="site-header">
+  <div class="site-header__left">
+
+
+    <span class="site-header__title">
+      Home
+    </span>
+    <span class="site-header__subtitle">/ Company News</span>
+  </div>
+
+</div>
+{% if request.user|has_group:"Managers" %}
+<div class="moderator_bar">
+  <a href="{% url 'news:post_news' %}">Upload a new one</a>
+  <a href="{% url 'news:unpublished' %}">unpublished</a>
+  <a href="{% url 'news:news_list' %}">published</a>
+</div>
+{% endif %}
+
+<div class="content-container content-container--paginated">
+
+
+
+
+  <div class="objecta">
+
+  </div>
+  <select value="change edition" name="discard_reason" class="MySelect">
+    <option value="">--Select--</option>
+    <option value="Change edition">Change edition</option>
+    <option value="Change to eTextbook">Change to eTextbook</option>
+    <option value="Change title">Change title</option>
+    <option value="No material required">No material required</option>
+  </select>
+  {% for news in object_list %}
+
+
+
+
+
+  <div class="Ccard">
+    <div class="Ccard_header primary-hover">
+
+
+      <div class="Ccard_title">
+        {{news.title }}
+
+      </div>
+      <div class="Ccard_subtitle">
+        {% if news.published_date %}
+        {{news.published_date}}
+        {% endif %}
+      </div>
+    </div>
+    <div class="Ccard_body">
+      {% if not news.published_date %}
+
+
+      <a class="buttonn" href="{% url 'news:publish_news' pk=news.pk %}">
+        <div class="doc secondary-hover">Publish </div>
+      </a>
+      <a class="buttonn" href="{% url 'news:updatenews' pk=news.pk %}">
+        <div class="doc secondary-hover">Update </div>
+      </a>
+      {% endif %}
+      {{news.body | safe}}
+
+      {% if news.files.all %}
+      <div class="Ccard_divider">
+        Attached files
+      </div>
+      {% endif %}
+      <div class="Ccard_file-container">
+
+        {% for each in news.files.all %}
+
+        <div class="Ccard_file">
+          {% if each.extension == 'image' %}
+          <img src="{{each.miniature}}">
+          <p><a href="{{each.file.get_absolute_url}}" download>Download</a></p>
+
+          {% elif each.extension == 'pdf' %}
+          <img src="{% static 'media/pdf-icon.png' %}">
+          <p><a href="{{each.file.get_absolute_url}}" download>{{each}}</a></p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+
+    </div>
+
+  </div>{% endfor %} <div class="pag-wrapper"> {% if is_paginated %}
+
+
+
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}">
+        <li class="secondary-hover">&laquo;</li>
+      </a>
+      {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+      {% endif %}
+      {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+      <li class="active pagi__number"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+      <a href="?page={{ i }}">
+        <li class="secondary-hover">{{ i }}</li>
+      </a>
+      {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}">
+        <li class="secondary-hover">&raquo;</li>
+      </a>
+      {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+      {% endif %}
+    </ul>
+
+    {% endif %}
+  </div>
+</div>{% if object_list.count <= 7 %}
+<div class="site-filler">
+
+</div>
+{% endif %}
+
+<script>
+  $('.Ccard_body').toggle();
+
+
+
+  $(document).ready(function() {
+    $(".Ccard_header").click(function() {
+      $(this).parents('.Ccard').find('.Ccard_body').toggle();
+
+    });
+  });
+</script>
+
+<script>
+
+
+
+
+</script>
+{% endblock %}

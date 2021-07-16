@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block extra_css %}  .nav__link[name="Polls"] {background-color: #1caf9a; color: white;} {% endblock %}
+{% block body_block %}
+{% load static %}
+{% load groupfilter %}
+<div class="site-header">
+  <div class="site-header__left">
+
+
+    <span class="site-header__title">
+      Poll Results
+    </span>
+
+  </div>
+  <div class="site-header__right">
+    <span class="site-header__breadcrumb">
+    <div class="breadcrumbs">
+    <a href="{% url 'news:news_list' %}">Home</a>
+
+     &rsaquo; <span>Poll results</span>
+    </div>
+</span>
+  </div>
+</div>
+
+
+<div class="content-container content-container--paginated">
+  {% if request.user|has_group:"Managers" %}
+  <div class="moderator_bar">
+
+
+
+    </div>
+  {% endif %}
+<div class="Ccard">
+  <div class="Ccard_header">
+
+
+  <div class="Ccard_title">
+    List of Polls
+      </div>
+  </div>
+
+<div class="Ccard_body">
+
+
+
+  {% for poll in object_list %}
+
+  <div class="question">
+        <a class="buttonn" href="{% url 'polls:detailanswers' pk=poll.pk %}" style="display:block;"><div class="question_title secondary-hover">
+    {{poll.title}}
+    <span class="Ccard_subtitle">{{poll.published_date|date:"m.d.y"}}</span>
+        <span class="Ccard_subtitle">Submitions: {{poll.submitions.count}}</span></div>
+</a>
+
+</div>
+          {% endfor %}
+
+
+    </div>
+
+
+
+
+  {% endblock %}
