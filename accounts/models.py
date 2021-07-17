@@ -43,7 +43,7 @@ class UserProfile(models.Model):
     employee_id = models.PositiveIntegerField()
     position = models.CharField(max_length=40, default="trainee")
     objects = AvatarManager()
-    first_login_string = models.CharField(max_length=30, null=True)
+    first_login_string = models.CharField(max_length=30, blank=True, null=True)
     is_active = models.BooleanField(default=False)
     departament = models.CharField(
         max_length=3,
@@ -61,9 +61,14 @@ class UserProfile(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        profiles = UserProfile.objects.order_by('-employee_id')
-        highest_id = profiles[0].employee_id
-        self.employee_id = highest_id + 1
+        if self.employee_id is not None:
+            profiles = UserProfile.objects.order_by('-employee_id')
+            try:
+                highest_id = profiles[0].employee_id
+            except:
+                highest_id = 0
+            self.employee_id = highest_id + 1
+
         self.first_login_string = ''.join(random.choices( \
             string.ascii_letters + string.digits, k=15))
         super(UserProfile, self).save(*args, **kwargs)
