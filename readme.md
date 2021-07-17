@@ -27,7 +27,7 @@ mkdir venv
 
 python3 -m venv venv/intranet
 
-source venv/intranet/bin/activate
+source venv/intranet-project/bin/activate
 
 pip install -r requirements.txt
 
