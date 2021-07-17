@@ -21,13 +21,13 @@ git clone https://github.com/kraupn3r/intranet.git
 
 sudo apt install python3-venv
 
-cd djangochat
+cd intranet
 
 mkdir venv
 
-python3 -m venv venv/djangochat
+python3 -m venv venv/intranet
 
-source venv/djangochat/bin/activate
+source venv/intranet/bin/activate
 
 pip install -r requirements.txt
 
