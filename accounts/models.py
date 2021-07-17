@@ -16,7 +16,7 @@ class AvatarManager(models.Manager):
         img_format = format_ext_dict[ext]
         im = Image.open(file)
         im.thumbnail((128, 128), Image.ANTIALIAS)
-        save_name = '/media/profile_pics/' + name + ext
+        save_name = settings.MEDIA_DIR + '/profile_pics/' + name + ext
         im.save(fp=save_name, format=img_format)
         print(save_name)
         return save_name
