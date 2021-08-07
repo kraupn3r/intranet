@@ -2,7 +2,7 @@ import random
 import string
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from .models import UserProfile
@@ -125,7 +125,7 @@ def delete_profile_pic(request):
     return redirect('accounts:profile')
 
 @login_required
-@permission_required('users.add_user', raise_exception=True)
+@permission_required('auth.add_user', raise_exception=True)
 def register(request):
 
     if request.method == 'POST':
@@ -156,12 +156,13 @@ def register(request):
                             {'user_form':user_form,
                             'profile_form':profile_form})
 
+@login_required
 def set_password(request):
     if request.method == 'POST':
         form = SetPasswordForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Important!
+            update_session_auth_hash(request, user)
             user.userprofile.is_active = True
             user.userprofile.save()
             messages.success(
