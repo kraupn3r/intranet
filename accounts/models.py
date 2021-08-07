@@ -11,14 +11,14 @@ from accounts.choices.choices import *
 class AvatarManager(models.Manager):
     def resize_file(self, file):
         name, ext = os.path.splitext(file.name)
-        print(name + "  " + ext)
+        # print(name + "  " + ext)
         format_ext_dict = {'.jpg': 'JPEG', '.png': 'PNG', '.gif': 'GIF'}
         img_format = format_ext_dict[ext]
         im = Image.open(file)
         im.thumbnail((128, 128), Image.ANTIALIAS)
         save_name = settings.MEDIA_DIR + 'profile_pics/' + name + ext
         im.save(fp=save_name, format=img_format)
-        print(save_name)
+        # print(save_name)
         return 'profile_pics/' + name + ext
 
 

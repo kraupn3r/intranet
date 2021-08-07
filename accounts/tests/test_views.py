@@ -199,7 +199,6 @@ class TestRegisterView(TestCase):
             name='Test User1',
             telephone='11',
             email='testuser1@email.com',
-            # employee_id='2',
             departament='HR',
             location='WAW'
         )
@@ -209,7 +208,6 @@ class TestRegisterView(TestCase):
             name='Test User2',
             telephone='22',
             email='testuser2@email.com',
-            # employee_id='3',
             departament='sal',
             location='PZN'
         )
@@ -278,7 +276,6 @@ class TestFirstLoginView(TestCase):
             name='Test User1',
             telephone='11',
             email='testuser1@email.com',
-            # employee_id='2',
             departament='HR',
             location='WAW',
             is_active=True
@@ -289,7 +286,6 @@ class TestFirstLoginView(TestCase):
             name='Test User2',
             telephone='22',
             email='testuser2@email.com',
-            # employee_id='3',
             departament='sal',
             location='PZN'
         )
@@ -302,7 +298,6 @@ class TestFirstLoginView(TestCase):
     def test_views_if_account_active(self):
         response = self.client.get(reverse('accounts:first_login', kwargs={
                                    'string': self.test_user1_userprofile.first_login_string}))
-        print(response.content)
         self.assertEquals(response.status_code, 403)
 
     def test_views_if_redirects_when_account_not_active(self):
