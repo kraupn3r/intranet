@@ -73,6 +73,7 @@ class TestCalendarAPIView(APITestCase):
                         description='trr',
                         start = '00:00',
                         end = '12:00')
+
     def test_queryset_both_params(self):
         user = self.test_user1
         token = get_token(user)
@@ -96,6 +97,23 @@ class TestCalendarAPIView(APITestCase):
         response = view(request)
         response.render()
         self.assertEquals(len(json.loads(response.content)), 1)
+
+    def test_post_devent(self):
+        user = self.test_user1
+        token = get_token(user)
+        data = {
+             'day':'2020-01-20',
+             'title':'test devent post',
+             'description':'test description'
+        }
+        request = self.factory.post(
+            '/calendar/api/',data,HTTP_AUTHORIZATION='JWT ' + token, format='json')
+        view = CalendarAPIView.as_view()
+        response = view(request)
+        response.render()
+
+        expected_respone = {'id': 3, 'day': '2020-01-20', 'title': 'test devent post', 'description': 'test description', 'start': '00:00', 'end': '23:59'}
+        self.assertEquals(json.loads(response.content), expected_respone)
 
 
 
@@ -140,6 +158,19 @@ class TestDeventAPIView(APITestCase):
                         description='test description',
                         )
 
+
+    def test_get(self):
+        user = self.test_user1
+        token = get_token(user)
+
+        request = self.factory.get(
+            '/calendar/api/devent/1/',HTTP_AUTHORIZATION='JWT ' + token, format='json')
+        view = DeventDetailAPIView.as_view()
+        response = view(request, pk = 1)
+        response.render()
+        expected_respone = {'id': 1, 'day': '2020-01-02', 'title': 'test devent', 'description': 'test description', 'start': '00:00:00', 'end': '23:59:00'}
+        self.assertEquals(json.loads(response.content), expected_respone)
+
     def test_patch_gets_pk(self):
         user = self.test_user1
         token = get_token(user)
@@ -148,14 +179,27 @@ class TestDeventAPIView(APITestCase):
              'title':'test devent patch',
              'description':'test description'
         }
-        request = self.factory.delete(
+        request = self.factory.patch(
             '/calendar/api/devent/1/',data,HTTP_AUTHORIZATION='JWT ' + token, format='json')
         view = DeventDetailAPIView.as_view()
         response = view(request, pk = 1)
         response.render()
-        print(json.loads(response.content))
+        expected_respone = {'id': 1, 'day': '2020-01-20', 'title': 'test devent patch', 'description': 'test description', 'start': '00:00:00', 'end': '23:59:00'}
+        self.assertEquals(json.loads(response.content), expected_respone)
 
+    def test_delete(self):
+        user = self.test_user1
+        token = get_token(user)
 
-            #     expected_respone = [{'id': 1, 'title': 'Test Category', 'docs': [], 'files': []},
-            #                         {'id': 2, 'title': 'Test Category 2', 'docs': [{'id': 1, 'title': 'test title', 'date_created': '2021-07-10T18:11:11.055162Z'}], 'files': []}]
-            #     self.assertEquals(json.loads(response.content), expected_respone)
+        request = self.factory.delete(
+            '/calendar/api/devent/1/',HTTP_AUTHORIZATION='JWT ' + token, format='json')
+        view = DeventDetailAPIView.as_view()
+        response = view(request, pk = 1)
+        request = self.factory.get(
+            '/calendar/api/devent/1/',HTTP_AUTHORIZATION='JWT ' + token, format='json')
+        view = DeventDetailAPIView.as_view()
+        response = view(request, pk = 1)
+        response.render()
+
+        expected_respone = {'detail': 'Not found.'}
+        self.assertEquals(json.loads(response.content), expected_respone)

@@ -60,7 +60,7 @@ class UserProfileDetailAPIView(mixins.UpdateModelMixin,
             UserProfile, pk=self.request.user.userprofile.pk)
         return object
 
-    def put(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         object = self.get_object()
 
         if request.data != {}:

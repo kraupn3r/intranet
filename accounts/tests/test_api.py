@@ -170,7 +170,7 @@ class TestUserProfileDetailAPIView(APITestCase):
         files = {
             'file': self.simple_file_image
         }
-        request = self.factory.put(
+        request = self.factory.patch(
             '/accounts/api/profile/', data=files, HTTP_AUTHORIZATION='JWT ' + token)
         view = UserProfileDetailAPIView.as_view()
 
@@ -182,7 +182,7 @@ class TestUserProfileDetailAPIView(APITestCase):
         self.assertEquals(self.test_user1.userprofile.profile_pic.path.split(
             '\\')[-1:][0], expected_image)
         self.assertEquals(json.loads(response.content), expected_respone)
-        request = self.factory.put(
+        request = self.factory.patch(
             '/accounts/api/profile/', HTTP_AUTHORIZATION='JWT ' + token)
         view = UserProfileDetailAPIView.as_view()
 

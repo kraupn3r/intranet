@@ -13,7 +13,7 @@ class DeventDetailAPIView(
         mixins.DestroyModelMixin):
 
     permission_classes = [permissions.IsAuthenticated,
-                          permissions.DjangoObjectPermissions]
+                          permissions.DjangoModelPermissions]
 
     serializer_class = CalendarSerializer
     queryset = Devent.objects.all()
@@ -23,10 +23,10 @@ class DeventDetailAPIView(
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
-    def patch(self, request, *args, **kwargs):
+    def patch(self, request, pk):
         day = Day.objects.get(date__iexact=request.data['day']).pk
         request.data['day'] = day
-        return self.update(request, *args, **kwargs)
+        return self.partial_update(request, pk)
 
 
 class CalendarAPIView(generics.ListAPIView, mixins.CreateModelMixin):
