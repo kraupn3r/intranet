@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser
 from rest_framework import generics, permissions
 from rest_framework_jwt.settings import api_settings
 from django.db.models import Q
-from .serializers import UserRegisterSerializer, UserProfileSerializer, ChangePasswordSerializer
+from .serializers import  UserProfileSerializer, ChangePasswordSerializer
 from rest_framework import generics, mixins, permissions
 from rest_framework.authentication import SessionAuthentication
 from accounts.models import UserProfile
@@ -17,17 +18,16 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 jwt_response_payload_handler = api_settings.JWT_RESPONSE_PAYLOAD_HANDLER
 
 
-class RegisterAPIView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserRegisterSerializer
-    permission_classes = [permissions.AllowAny]
+# class RegisterAPIView(generics.CreateAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserRegisterSerializer
+#     permission_classes = [permissions.AllowAny]
+#
+#     def get_serializer_context(self, *args, **kwargs):
+#         return {'request': self.request}
 
-    def get_serializer_context(self, *args, **kwargs):
-        return {'request': self.request}
 
-
-class UserProfileListAPIView(
-        generics.ListAPIView):
+class UserProfileListAPIView(generics.ListAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserProfileSerializer
@@ -49,6 +49,7 @@ class UserProfileListAPIView(
 
 class UserProfileDetailAPIView(mixins.UpdateModelMixin,
                                generics.RetrieveAPIView):
+    parser_classes = [MultiPartParser]
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserProfileSerializer
     queryset = UserProfile.objects.all()
@@ -61,11 +62,12 @@ class UserProfileDetailAPIView(mixins.UpdateModelMixin,
 
     def put(self, request, *args, **kwargs):
         object = self.get_object()
-        data = request.data
-        if data.get('profile_pic') is not None:
-            image = data.get('profile_pic')
+
+        if request.data != {}:
+            file = request.data['file']
+            image = file
             UserProfile.change_profile_pic(object, image)
-            return Response("Profile Picture has been changed", status=status.HTTP_200_OK)
+            return Response("Profile picture has been changed", status=status.HTTP_200_OK)
         else:
             object.set_default_profile_pic()
             return Response("Profile picture has been set to default", status=status.HTTP_200_OK)
