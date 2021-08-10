@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from suggestions.models import BoardCategory, Post, Comment
 
 
-
 class PostModelTest(TestCase):
 
     @classmethod
@@ -22,19 +21,16 @@ class PostModelTest(TestCase):
             location='WAW'
         )
 
-
         test_board_category1 = BoardCategory.objects.create(
             title='test title 1'
         )
 
         cls.test_post = Post.objects.create(
-            body = 'test body',
-            author = cls.test_user1,
-            title = 'test title',
-            category = test_board_category1
+            body='test body',
+            author=cls.test_user1,
+            title='test title',
+            category=test_board_category1
         )
-
-
 
     def test_post_title_label(self):
         field_label = self.test_post._meta.get_field(
@@ -65,7 +61,7 @@ class PostModelTest(TestCase):
 
     def test_post_absolute_url(self):
         expected_url = '/suggestions/1/'
-        self.assertEqual(self.test_post.get_absolute_url(),expected_url)
+        self.assertEqual(self.test_post.get_absolute_url(), expected_url)
 
 
 class CommentModelTest(TestCase):
@@ -85,23 +81,21 @@ class CommentModelTest(TestCase):
             location='WAW'
         )
 
-
         test_board_category1 = BoardCategory.objects.create(
             title='test title 1'
         )
 
         cls.test_post = Post.objects.create(
-            body = 'test body',
-            author = cls.test_user1,
-            title = 'test title',
-            category = test_board_category1
+            body='test body',
+            author=cls.test_user1,
+            title='test title',
+            category=test_board_category1
         )
         cls.test_comment = Comment.objects.create(
-            body = 'test body',
-            author = cls.test_user1,
-            Post = cls.test_post
+            body='test body',
+            author=cls.test_user1,
+            Post=cls.test_post
         )
-
 
     def test_comment_body_label(self):
         field_label = self.test_comment._meta.get_field(

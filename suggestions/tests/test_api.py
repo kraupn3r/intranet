@@ -2,10 +2,8 @@ import json
 from django.urls import reverse
 from accounts.models import UserProfile
 from django.contrib.auth.models import User
-from datetime import date, timedelta
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import Group
-from django.utils import timezone
 from rest_framework.test import APIRequestFactory, APITestCase
 from ..models import Post, BoardCategory, Comment
 from ..api.views import PostListAPIView, CommentAPIView, PostDetailAPIView, BoardCategoryListAPIView
