@@ -54,9 +54,11 @@ def post_post(request):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.author = User.objects.get(username=request.user.username)
+
             instance.save()
             return redirect('suggestions:postlist')
     else:
+
         form = PostForm()
     return render(request, 'suggestions/postform.html', {'form': form})
 

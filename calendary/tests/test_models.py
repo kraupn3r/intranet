@@ -9,7 +9,7 @@ class CalendarModelsTest(TestCase):
 
     def setUp(self):
         test_user1 = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
-        test_user1.save()
+
 
         test_user1_userprofile = UserProfile.objects.create(
             user=test_user1,
@@ -20,7 +20,6 @@ class CalendarModelsTest(TestCase):
             departament='HR',
             location='WAW'
             )
-        test_user1_userprofile.save()
 
         self.test_date = date(2019, 12, 1)
         self.test_day = Day.objects.create(date = self.test_date)

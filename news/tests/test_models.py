@@ -325,52 +325,6 @@ class NotificationReadFlagModelTest(TestCase):
                          expected_object_name)
 
 
-#
-# class NewsReadFlagModelTest(TestCase):
-#
-#
-#     @classmethod
-#     def setUpTestData(cls):
-#         test_user1 = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
-#
-#         test_user1.save()
-#         test_user1_userprofile = UserProfile.objects.create(
-#             user=test_user1,
-#             name='Test User1',
-#             telephone='11',
-#             email='testuser1@email.com',
-#             employee_id='2',
-#             departament='HR',
-#             location='WAW'
-#             )
-#
-#         cls.test_news = News.objects.create(
-#             title='test title',
-#             body='test body',
-#             author= test_user1,
-#         )
-#         cls.test_news.publish()
-#         cls.test_news.save()
-#         cls.test_newsreadflag = NewsReadFlag.objects.get(pk=1)
-#
-#     def test_newsreadflag_read_label(self):
-#         field_label = self.test_newsreadflag._meta.get_field('read').verbose_name
-#         self.assertEqual(field_label, 'read')
-#
-#     def test_newsreadflag_user_label(self):
-#         field_label = self.test_newsreadflag._meta.get_field('user').verbose_name
-#         self.assertEqual(field_label, 'user')
-#
-#     def test_newsreadflag_news_label(self):
-#         field_label = self.test_newsreadflag._meta.get_field('news').verbose_name
-#         self.assertEqual(field_label, 'news')
-#
-#     def test_newsreadflag_object_name(self):
-#         expected_object_name = '{0} ({1}) '.format(self.test_newsreadflag.user.userprofile, self.test_newsreadflag.news)
-#         self.assertEqual(str(self.test_newsreadflag), expected_object_name)
-#
-#
-
 
 class KnowledgeCategoryModelTest(TestCase):
 
@@ -390,12 +344,7 @@ class KnowledgeCategoryModelTest(TestCase):
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class DocFileModelTest(TestCase):
-    # file
-    # title
-    # date_created
-    # target_departament
-    # target_location
-    # category
+
 
     @classmethod
     def tearDownClass(cls):
@@ -473,13 +422,7 @@ class DocFileModelTest(TestCase):
 
 
 class DocumentFModelTest(TestCase):
-    # title
-    # body
-    # author
-    # date_created
-    # target_departament
-    # target_location
-    # category
+
     @classmethod
     def setUpTestData(cls):
         test_user1 = User.objects.create_user(
@@ -565,13 +508,7 @@ class DocumentFModelTest(TestCase):
 
 
 class DocQuestionModelTest(TestCase):
-    # title
-    # body
-    # author
-    # date_created
-    # target_departament
-    # target_location
-    # category
+
     @classmethod
     def setUpTestData(cls):
         test_user1 = User.objects.create_user(

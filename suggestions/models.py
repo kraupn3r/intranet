@@ -37,7 +37,7 @@ class Post(models.Model):
         return reverse('suggestions:postdetail', args=[str(self.id)])
 
     class Meta:
-        ordering = ['-last_activity']
+        ordering = ['-last_activity','-id']
 
 
 class Comment(models.Model):

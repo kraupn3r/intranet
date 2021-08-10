@@ -1,5 +1,4 @@
 from django.contrib.auth import authenticate, get_user_model
-
 from rest_framework.response import Response
 from rest_framework import generics, permissions
 from rest_framework_jwt.settings import api_settings
@@ -11,18 +10,7 @@ from rest_framework.authentication import SessionAuthentication
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework import status
-import json
-import copy
 User = get_user_model()
-
-def is_json(json_data):
-    try:
-        real_json = json.loads(json_data)
-        is_valid = True
-    except ValueError:
-        is_valid = False
-    return is_valid
-
 
 
 
