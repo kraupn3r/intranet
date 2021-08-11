@@ -17,25 +17,26 @@ sqlparse==0.4.1
 Setup Django project :
 
 ```
-git clone https://github.com/kraupn3r/intranet.git
+git clone https://github.com/kraupn3r/intranet-project.git
 
 sudo apt install python3-venv
 
-cd intranet
+cd intranet-project
 
 mkdir venv
 
 python3 -m venv venv/intranet
 
-source venv/intranet-project/bin/activate
+source venv/intranet/bin/activate
 
 pip install -r requirements.txt
 
-pip install --upgrade pip
 ```
 Perform database migration :
 
 ```
+python manage.py makemigrations
+
 python manage.py migrate
 ```
 Create Django superuser :
