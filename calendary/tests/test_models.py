@@ -36,7 +36,7 @@ class CalendarModelsTest(TestCase):
         self.assertEqual(field_label, 'date')
 
     def test_day_object_name(self):
-        expected_object_name = self.test_day.date.strftime('%m/%d/%Y')
+        expected_object_name = self.test_day.date.strftime('%m.%d.%Y')
         self.assertEqual(str(self.test_day), expected_object_name)
 
     def test_devent_day_label(self):
@@ -71,7 +71,7 @@ class CalendarModelsTest(TestCase):
 
     def test_devent_get_absolute_url(self):
         self.assertEqual(self.test_devent.get_absolute_url(),
-                         '/calendar/event/1')
+                         '/calendar/event/test-devent-title')
 
     def test_devent_title_max_length(self):
         max_length = self.test_devent._meta.get_field('title').max_length

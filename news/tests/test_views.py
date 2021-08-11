@@ -6,7 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 from accounts.models import UserProfile
 from news.models import KnowledgeCategory, DocumentF, DocQuestion, DocFile, \
-    NewsFile, DocumentF, News, NotificationReadFlag
+    NewsFile, DocumentF, News, NotificationReadFlag, Notification
 from datetime import date, timedelta
 import json
 import tempfile
@@ -82,7 +82,8 @@ class TestKnowledgeCategoryListView(TestCase):
                 date_created = timezone.now(),
                 target_departament = test_departament,
                 target_location  = test_location,
-                category = file_test_category)
+                category = file_test_category,
+                author = test_user1)
             instance.save()
 
             instance = DocumentF.objects.create(
@@ -115,22 +116,22 @@ class TestKnowledgeCategoryListView(TestCase):
     def test_view_if_files_filtered(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
         response = self.client.get(reverse('news:knowledge'))
-        self.assertEquals(response.context['files'].count(),6)
+        self.assertEquals(response.context['files'].count(),8)
 
     def test_view_if_files_filtered_2(self):
         login = self.client.login(username='testuser2', password='1ddsSRUkw+tuK')
         response = self.client.get(reverse('news:knowledge'))
-        self.assertEquals(response.context['files'].count(),5)
+        self.assertEquals(response.context['files'].count(),6)
 
     def test_view_if_documents_filtered(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
         response = self.client.get(reverse('news:knowledge'))
-        self.assertEquals(response.context['docs'].count(),6)
+        self.assertEquals(response.context['docs'].count(),8)
 
     def test_view_if_documents_filtered_2(self):
         login = self.client.login(username='testuser2', password='1ddsSRUkw+tuK')
         response = self.client.get(reverse('news:knowledge'))
-        self.assertEquals(response.context['docs'].count(),5)
+        self.assertEquals(response.context['docs'].count(),6)
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -193,7 +194,7 @@ class TestKnowledgeCategoryDetailView(TestCase):
                 test_departament = 'non'
             else:
                 test_departament = 'sal'
-            # print(test_location + '  ' + test_departament + '  ' + file_test_category.title)
+
 
             instance = DocFile.objects.create(
                 file = SimpleUploadedFile(
@@ -204,7 +205,8 @@ class TestKnowledgeCategoryDetailView(TestCase):
                 date_created = timezone.now(),
                 target_departament = test_departament,
                 target_location  = test_location,
-                category = file_test_category)
+                category = file_test_category,
+                author = test_user1)
             instance.save()
 
             instance = DocumentF.objects.create(
@@ -237,22 +239,22 @@ class TestKnowledgeCategoryDetailView(TestCase):
     def test_view_if_files_filtered_by_category(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
         response = self.client.get(reverse('news:knowledgedetail',kwargs={'pk':self.test_category_2.pk}))
-        self.assertEquals(response.context['files'].count(),6)
+        self.assertEquals(response.context['files'].count(),8)
 
     def test_view_if_files_filtered_by_category_2(self):
         login = self.client.login(username='testuser2', password='1ddsSRUkw+tuK')
         response = self.client.get(reverse('news:knowledgedetail',kwargs={'pk':self.test_category_2.pk}))
-        self.assertEquals(response.context['files'].count(),2)
+        self.assertEquals(response.context['files'].count(),3)
 
     def test_view_if_documents_filtered_by_category(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
         response = self.client.get(reverse('news:knowledgedetail',kwargs={'pk':self.test_category_2.pk}))
-        self.assertEquals(response.context['docs'].count(),6)
+        self.assertEquals(response.context['docs'].count(),8)
 
     def test_view_if_documents_filtered_by_category_2(self):
         login = self.client.login(username='testuser2', password='1ddsSRUkw+tuK')
         response = self.client.get(reverse('news:knowledgedetail',kwargs={'pk':self.test_category_2.pk}))
-        self.assertEquals(response.context['docs'].count(),2)
+        self.assertEquals(response.context['docs'].count(),3)
 
     def test_view_if_categories_queryset(self):
         login = self.client.login(username='testuser2', password='1ddsSRUkw+tuK')
@@ -911,11 +913,15 @@ class TestAnswerFaqView(TestCase):
             departament='sal',
             location='PZN'
             )
-        permission = Permission.objects.get(name='Can view user question')
-        test_user2.user_permissions.add(permission)
-        test_user2.save()
 
-        cls.test_userquestion = UserQuestion.objects.create(
+        test_category = KnowledgeCategory.objects.create(title='Test Category')
+
+        newgroup = Group.objects.create(name='testgroup')
+        for each in Permission.objects.all():
+            newgroup.permissions.add(each)
+
+        test_user2.groups.add(newgroup)
+        cls.test_userquestion = DocQuestion.objects.create(
             title='test title',
             body='test body',
             author= test_user1,

@@ -3,11 +3,12 @@ from accounts.models import UserProfile
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from news.models import KnowledgeCategory, DocumentF, DocQuestion, DocFile, \
-    NewsFile, DocumentF, News, NotificationReadFlag
+    NewsFile, DocumentF, News, NotificationReadFlag, Notification
 from datetime import date, timedelta
 from django.core.files.uploadedfile import SimpleUploadedFile
 from PIL import Image
 import tempfile
+from django.conf import settings
 import shutil
 MEDIA_ROOT = tempfile.mkdtemp()
 
@@ -163,7 +164,8 @@ class NewsFileModelTest(TestCase):
         cls.test_news_file = NewsFile.objects.save_file(simple_file)
         cls.test_news_file.save()
 
-        test_image_path = settings.MEDIA_DIR + '/test_image/dino.jpg'
+        test_image_path = 'news/tests/test_image/dino.jpg'
+
         simple_file_image = SimpleUploadedFile(name='testimage.jpg',  content=open(
             test_image_path, 'rb').read(), content_type='image/jpeg')
         cls.test_news_file_2 = NewsFile.objects.save_file(simple_file_image)
@@ -612,8 +614,9 @@ class UserQuestionModelTest(TestCase):
             departament='HR',
             location='WAW'
         )
-
-        cls.test_docquestion = UserQuestion.objects.create(
+        cls.test_category = KnowledgeCategory.objects.create(
+            title='test category')
+        cls.test_docquestion = DocQuestion.objects.create(
             title='test title',
             body='test body',
             author=test_user1

@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from django.contrib.auth.models import User
 from accounts.models import UserProfile
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -14,7 +14,6 @@ from django.contrib import messages
 from django.db.models import Q
 import json
 from django.core.exceptions import PermissionDenied
-
 
 def locationdepartamentfilter(qs, userprofile):
     qs = qs.filter(Q(target_location=userprofile.location) | Q(target_location='non') & Q(

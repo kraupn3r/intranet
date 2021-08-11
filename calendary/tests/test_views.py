@@ -82,16 +82,16 @@ class TestDayDetailView(TestCase):
 
     def test_view_redirect_if_not_logged_in(self):
         response = self.client.get(
-            reverse('calendary:devent', kwargs={'pk': self.test_day.pk}))
+            reverse('calendary:devent', kwargs={'slug': self.test_devent.slug}))
         self.assertEquals(response.status_code, 302)
         self.assertRedirects(
-            response, '/accounts/login/?next=/calendar/event/153')
+            response, '/accounts/login/?next=/calendar/event/test-devent')
 
     def test_view_if_logged_in(self):
         login = self.client.login(
             username='testuser1', password='1X<ISRUkw+tuK')
         response = self.client.get(
-            reverse('calendary:devent', kwargs={'pk': self.test_devent.pk}))
+            reverse('calendary:devent', kwargs={'slug': self.test_devent.slug}))
         self.assertEqual(str(response.context['user']), 'testuser1')
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'calendary/devent_detail.html')
